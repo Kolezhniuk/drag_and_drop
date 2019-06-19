@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="index.js"></script>
+    <title>Soccer</title>
+</head>
+
+<body>
+    <div class="score-container">
+        <div class="score left-score"> In the Left Goal </div>
+        <div class="score score-title"> SCORE </div>
+        <div class="score right-score"> In the Right Goal </div>
+        <div class="score left-score-result"> test l </div>
+        <div class="score score-result">
+            <span class="left-score-digit"> 0</span>:<span class="right-score-digit">0 </span>
+        </div>
+        <div class="score right-score-result"> test r </div>
+
+    </div>
+    <div class="container">
+        <div class="line"></div>
+        <div class="half"></div>
+        <div class="panelty left" ondragover="allowDrop(event)"></div>
+        <div class="panelty right" ondragover="allowDrop(event)"></div>
+        <div class="center"></div>
+    </div>
+    <div class="ball" style="display: none" draggable="true" ondragstart="drag(event)"> A</div>
+
+</body>
+
+</html>

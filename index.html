@@ -12,21 +12,25 @@
 
 <body>
     <div class="score-container">
-        <div class="score left-score"> In the Left Goal </div>
-        <div class="score score-title"> SCORE </div>
-        <div class="score right-score"> In the Right Goal </div>
-        <div class="score left-score-result"> test l </div>
-        <div class="score score-result">
-            <span class="left-score-digit"> 0</span>:<span class="right-score-digit">0 </span>
+        <div class="score-panel-title">
+            <div class="score left-score"> In the Left Goal </div>
+            <div class="score score-title"> SCORE </div>
+            <div class="score right-score"> In the Right Goal </div>
         </div>
-        <div class="score right-score-result"> test r </div>
+        <div class="score-panel">
+            <div class="score left-score-result"> </div>
+            <div class="score score-result">
+                <span class="left-score-digit"> 0</span>:<span class="right-score-digit">0 </span>
+            </div>
+            <div class="score right-score-result"> </div>
+        </div>
 
     </div>
     <div class="container">
         <div class="line"></div>
         <div class="half"></div>
-        <div class="panelty left" ondragover="allowDrop(event)"></div>
-        <div class="panelty right" ondragover="allowDrop(event)"></div>
+        <div class="panelty left" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="panelty right" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
         <div class="center"></div>
     </div>
     <div class="ball" style="display: none" draggable="true" ondragstart="drag(event)"> A</div>

@@ -1,49 +1,76 @@
 window.onload = function () {
     generateBalls();
-    // isGoal();
 };
 var BALL_COUNT = 7;
-var BAll_SIZE = 40; //px
+var BAll_SIZE = 30;
 
 function allowDrop(ev) {
-    debugger
     ev.preventDefault();
 }
 
 function drag(ev) {
-    debugger
-    ev.dataTransfer.setData("text", ev.target.id);
+    ev.dataTransfer.setData("ball", ev.target.id);
 }
 
 function drop(ev) {
-    debugger
     ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+    var leftGate = document.querySelector('.panelty.left');
+    var rightGate = document.querySelector('.panelty.right');
+    var ballId = ev.dataTransfer.getData("ball");
+    var targetBall = document.getElementById(ballId);
+    var isGoalToLeft = isGoal({ x: ev.x, y: ev.y }, leftGate);
+    var isGoalToRight = isGoal({ x: ev.x, y: ev.y }, rightGate);
+    targetBall.style.left = ev.pageX  + 'px';
+    targetBall.style.top = ev.pageY + 'px';
+    targetBall.draggable = false;
+    if (isGoalToLeft) {
+        incrementScore('.left-score-digit');
+        appendBallToResultTable('.left-score-result', targetBall);
+    }
+    if (isGoalToRight) {
+        incrementScore('.right-score-digit');
+        appendBallToResultTable('.right-score-result', targetBall);
+    }
+}
+
+function incrementScore(querySelector) {
+    var leftScore = document.querySelector(querySelector);
+    leftScore.innerText = parseInt(leftScore.innerText) + 1;
+}
+function appendBallToResultTable(querySelector, ball) {
+    var lefScoretResult = document.querySelector(querySelector);
+    var resultBall =  ball.cloneNode(true);
+    resultBall.id = '';
+    resultBall.style.position = 'relative';
+    resultBall.style.left = 'auto';
+    resultBall.style.top = 'auto';
+    resultBall.style.display = 'inline-block';
+    lefScoretResult.insertBefore(resultBall, lefScoretResult.lastChild);
 }
 
 function generateBalls() {
     var ballTemplate = document.querySelector('.ball');
-    // var lefScoretResult = document.querySelector('.left-score-result')
-    var field =  document.querySelector('.container');
-    var leftGate =  document.querySelector('.panelty.left');
-    var rightGate =  document.querySelector('.panelty.right');
+    var field = document.querySelector('.container');
+    var leftGate = document.querySelector('.panelty.left');
+    var rightGate = document.querySelector('.panelty.right');
 
     for (var index = 0; index < BALL_COUNT; index++) {
         var ball = ballTemplate.cloneNode(true);
         ball.style.backgroundColor = getRandomColor();
         ball.innerText = getRandomLetter();
+        ball.id = 'ball' + index;
         var position = getRandomPositionInRange(field);
-        var isInLeftGoal = isRectangleRangeLeft(position, leftGate);
-        var isRightGoal = isRectangleRangeRight(position, rightGate)
-        while(isInLeftGoal || isRightGoal){
+        var isInLeftGoal = isRectangleInRange(position, leftGate);
+        var isRightGoal = isRectangleInRange(position, rightGate);
+        while (isInLeftGoal || isRightGoal) {
+            console.log(ball.innerText, 'recalc');
             position = getRandomPositionInRange(field);
-            isInLeftGoal = isRectangleRangeLeft(position, leftGate);
-            isRightGoal = isRectangleRangeRight(position, rightGate);
+            isInLeftGoal = isRectangleInRange(position, leftGate);
+            isRightGoal = isRectangleInRange(position, rightGate);
         }
         ball.style.left = position.x + 'px';
         ball.style.top = position.y + 'px';
-        ball.style.display ='block';
+        ball.style.display = 'block';
         document.body.insertBefore(ball, document.body.lastChild);
 
     }
@@ -66,7 +93,7 @@ function getRandomColor() {
 function getElemHeightRange(elem) {
     var rect = elem.getBoundingClientRect();
     var minHeight = rect.top + BAll_SIZE;
-    var maxHeight = rect.bottom  - BAll_SIZE;
+    var maxHeight = rect.bottom - BAll_SIZE;
     return { yMin: minHeight, yMax: maxHeight };
 }
 
@@ -77,17 +104,15 @@ function getElemdWidthRange(elem) {
     return { xMin: minWidth, xMax: maxWidth };
 }
 
-function isRectangleRangeLeft(position, elem) {
+function isRectangleInRange(position, elem) {
     var rect = elem.getBoundingClientRect();
-    var delta = BAll_SIZE/2;
-    return position.x + delta > rect.left   && position.x < rect.right - delta
-         && position.y + delta> rect.top   && position.y < rect.bottom - delta;
+    return (position.x > rect.left && position.x < rect.right)
+        || (position.y > rect.top && position.y < rect.bottom);
 }
-function isRectangleRangeRight(position, elem) {
+function isGoal(position, elem) {
     var rect = elem.getBoundingClientRect();
-    var delta = BAll_SIZE;
-    return position.x - delta > rect.left   && position.x < rect.right + delta
-         && position.y + delta> rect.top   && position.y < rect.bottom - delta;
+    return (position.x > rect.left && position.x < rect.right)
+        && (position.y > rect.top && position.y < rect.bottom);
 }
 
 function getRandomInt(min, max) {
@@ -101,7 +126,7 @@ function getRandomPositionInRange(elem) {
     var yRange = getElemHeightRange(elem);
     var x = getRandomInt(xRange.xMin, xRange.xMax)
     var y = getRandomInt(yRange.yMin, yRange.yMax)
-    return {x: x, y:y};
+    return { x: x, y: y };
 }
 
 

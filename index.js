@@ -63,7 +63,6 @@ function generateBalls() {
         var isInLeftGoal = isRectangleInRange(position, leftGate);
         var isRightGoal = isRectangleInRange(position, rightGate);
         while (isInLeftGoal || isRightGoal) {
-            console.log(ball.innerText, 'recalc');
             position = getRandomPositionInRange(field);
             isInLeftGoal = isRectangleInRange(position, leftGate);
             isRightGoal = isRectangleInRange(position, rightGate);
